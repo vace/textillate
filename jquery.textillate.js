@@ -237,15 +237,18 @@
 
     base.init();
   }
-
+  var _cache = {};
   $.fn.textillate = function (settings, args) {
     return this.each(function () {
       var $this = $(this)
-        , data = $this.data('textillate')
+        , _data = $this.data('textillate')
+        , data = _cache[_data]
         , options = $.extend(true, {}, $.fn.textillate.defaults, getData(this), typeof settings == 'object' && settings);
 
       if (!data) {
-        $this.data('textillate', (data = new Textillate(this, options)));
+        var _ref = Math.random().toString(16).slice(2);
+        _data[_ref] = data = new Textillate(this, options)
+        $this.data('textillate', _ref);
       } else if (typeof settings == 'string') {
         data[settings].apply(data, [].concat(args));
       } else {
